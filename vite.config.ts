@@ -6,4 +6,17 @@
 // You can pass additional config via defineConfig({ vite: { ... } }) if needed.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
-export default defineConfig();
+// SPA build for Vercel:
+//   - cloudflare adapter disabled (no Workers runtime on Vercel)
+//   - tanstackStart.spa.enabled prerenders the app shell so Vercel can serve
+//     it as a pure static site. outputPath "/index" emits dist/client/index.html
+//     (default is "/_shell" which Vercel won't auto-serve as the document root).
+export default defineConfig({
+  cloudflare: false,
+  tanstackStart: {
+    spa: {
+      enabled: true,
+      prerender: { outputPath: "/index" },
+    },
+  },
+});
